@@ -1,0 +1,11 @@
+numpy
+scipy
+mne
+matplotlib
+pandas
+scikit-learn
+tensorflow
+torch
+seaborn
+streamlit
+joblib
