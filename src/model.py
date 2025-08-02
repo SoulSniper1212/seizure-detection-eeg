@@ -7,7 +7,7 @@ def create_cnn_model(input_shape, num_classes=1):
     Create a CNN model for seizure detection
     
     Args:
-        input_shape: Shape of input data (channels, time_steps)
+        input_shape: Shape of input data (time_steps, channels)
         num_classes: Number of output classes (1 for binary classification)
     
     Returns:
@@ -56,7 +56,7 @@ def create_lstm_model(input_shape, num_classes=1):
     Create an LSTM model for seizure detection
     
     Args:
-        input_shape: Shape of input data (channels, time_steps)
+        input_shape: Shape of input data (time_steps, channels)
         num_classes: Number of output classes (1 for binary classification)
     
     Returns:

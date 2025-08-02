@@ -166,17 +166,29 @@ def load_and_prepare_data(data_dir, patient_id='chb01', window_sec=5):
         window_sec: Window size in seconds
     
     Returns:
-        X: EEG segments (n_segments, channels, time_points)
+        X: EEG segments (n_segments, time_points, channels) - transposed for Conv1D
         y: Labels (n_segments,)
         segment_info: Additional segment information
     """
     # Load data
     eeg_data, raw_objects, seizure_info = load_chbmit_patient(data_dir, patient_id)
     
+    print(f"Loaded {len(eeg_data)} EEG files")
+    print(f"Loaded {len(raw_objects)} raw objects")
+    print(f"Found seizure info for {len(seizure_info)} files")
+    
     # Generate segments and labels
-    from preprocess import segment_eeg
+    from src.preprocess import segment_eeg
     X = segment_eeg(eeg_data, raw_objects, window_sec)
     y, segment_info = get_seizure_labels(eeg_data, raw_objects, seizure_info, window_sec)
+    
+    # Transpose X to (n_segments, time_points, channels) for Conv1D
+    X = np.transpose(X, (0, 2, 1))
+    
+    print(f"Final X shape: {X.shape}")
+    print(f"Final y shape: {y.shape}")
+    print(f"Number of seizure segments: {np.sum(y)}")
+    print(f"Number of non-seizure segments: {np.sum(y == 0)}")
     
     return X, y, segment_info
 

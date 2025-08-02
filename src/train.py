@@ -6,9 +6,9 @@ import os
 import joblib
 from datetime import datetime
 
-from model import create_cnn_model, create_lstm_model, compile_model
-from data_loader import load_and_prepare_data, get_data_statistics
-from evaluate import evaluate_model
+from src.model import create_cnn_model, create_lstm_model, compile_model
+from src.data_loader import load_and_prepare_data, get_data_statistics
+from src.evaluate import evaluate_model
 
 def create_model(input_shape, model_type='cnn'):
     """
@@ -95,8 +95,23 @@ def train_model(X_train, y_train, X_val, y_val, model_type='cnn',
     Returns:
         Trained model and training history
     """
+    # Debug: Print data shapes
+    print(f"X_train shape: {X_train.shape}")
+    print(f"X_val shape: {X_val.shape}")
+    print(f"y_train shape: {y_train.shape}")
+    print(f"y_val shape: {y_val.shape}")
+    
+    # Check for empty dimensions
+    if X_train.shape[1] == 0 or X_train.shape[2] == 0:
+        raise ValueError(f"Invalid input shape: {X_train.shape}. Check data preprocessing.")
+    
     # Create model
-    model = create_model(X_train.shape[1:], model_type)
+    input_shape = X_train.shape[1:]
+    print(f"Creating model with input shape: {input_shape}")
+    model = create_model(input_shape, model_type)
+    
+    # Print model summary
+    model.summary()
     
     # Callbacks
     callbacks = []
